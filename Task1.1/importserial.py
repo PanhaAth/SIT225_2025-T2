@@ -1,4 +1,3 @@
-
 import serial
 import random
 import time
@@ -6,7 +5,7 @@ from datetime import datetime
 
 baud_rate = 9600
 
-s = serial.Serial('COM9', baud_rate, timeout=5)
+s = serial.Serial('COM5', baud_rate, timeout=5)
 
 while True: #infinite loop, keep running
 
@@ -16,9 +15,8 @@ while True: #infinite loop, keep running
     print(f"[{datetime.now().strftime('%H:%M:%S')}] SEND >>> {data_send} ({d} bytes)")
 
     received_data = s.readline().decode("utf-8").strip()
-    d = int(received_data)
-    Sec = d/10 + 0.5
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] RECEIVE <<< sleep for {Sec:.1f}s")
+    Sec = d/10 + 1
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] RECEIVE <<< {d} sleep for {Sec}s")
 
     #Sleep for the calculated time
     time.sleep(Sec)
