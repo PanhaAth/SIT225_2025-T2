@@ -1,24 +1,28 @@
-int x;
+int receivedNumber;
 
 void setup() {
-  // put your setup code here, to run once:
-Serial.begin(9600);
-pinMode(LED_BUILTIN, OUTPUT);
-while(!Serial);
+  Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
+  while (!Serial);  // Wait for serial connection
+  randomSeed(analogRead(0));  // Initialize random number generator
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-x = Serial.readString().toInt();
-Serial.println(x);
-for(int i = 0; i < x; i++)
-{
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(100);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(100);
-}
-
-Serial.flush();
-delay(1000);
+  if (Serial.available()) {
+    // Step 1: Receive number from Python
+    receivedNumber = Serial.parseInt();
+    Serial.read();  // Clear the newline character
+    
+    // Step 2: Blink LED with 1-second interval
+    for (int i = 0; i < receivedNumber; i++) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(500);  // On for 0.5s
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(500);  // Off for 0.5s (total 1s interval)
+    }
+    
+    // Step 3: Send random number back to Python
+    int randomNum = random(5, 50);  // Range 5-50
+    Serial.println(randomNum);
+  }
 }
